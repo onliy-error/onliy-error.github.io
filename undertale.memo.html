@@ -16,6 +16,7 @@
             align-items: center;
             height: 100vh;
             margin: 0;
+            overflow: hidden;
         }
 
         .notepad {
@@ -26,12 +27,14 @@
             width: 80%;
             max-width: 600px;
             text-align: center;
+            animation: fadeIn 2s ease-in-out;
         }
 
         .notepad h1 {
             font-size: 1.5rem;
             margin-bottom: 1rem;
             color: #fff;
+            animation: glow 1.5s infinite alternate;
         }
 
         .note-content {
@@ -50,41 +53,22 @@
 
         .button {
             background-color: #fff;
-            color: #111;
+            color: #000;
             border: none;
             padding: 10px 20px;
             cursor: pointer;
             font-family: 'Press Start 2P', cursive;
         }
+
         .button:hover {
-            background-color: #555;
+            background-color: #ff0000;
             color: #fff;
+            animation: shake 0.5s;
         }
 
-        @keyframes flicker {
-            0% {
-                opacity: 1;
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 10px #fff, 0 0 20px #ff00ff, 0 0 30px #ff00ff, 0 0 40px #ff00ff, 0 0 50px #ff00ff, 0 0 60px #ff00ff, 0 0 70px #ff00ff;
             }
-            50% {
-                opacity: 0.5;
-            }
-            100% {
-                opacity: 1;
-            }
-        }
-
-        .underglow {
-            color: #fff;
-            text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #ff00ff, 0 0 30px #ff00ff, 0 0 40px #ff00ff, 0 0 50px #ff00ff, 0 0 60px #ff00ff, 0 0 70px #ff00ff;
-            animation: flicker 1.5s infinite;
-        }
-    </style>
-</head>
-<body>
-    <div class="notepad">
-        <h1 class="underglow">UNDERTALE<br>風メモ帳</h1>
-        <textarea class="note-content" placeholder="ここにメモを入力..."></textarea>
-        <button class="button">保存</button>
-    </div>
-</body>
-</html>
+            to {
+                text-shadow: 0 0 20px #fff, 0 0 30px #ff00ff, 0 0 40px #ff00ff, 0 0 50px #ff00ff
