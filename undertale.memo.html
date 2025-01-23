@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Undertale風メモ帳</title>
     <style>
+        @font-face {
+            font-family: 'Determination Mono';
+            src: url('DeterminationMonoWeb.ttf'); /* フォントファイルを追加してください */
+        }
         body {
             background-color: black;
             color: white;
@@ -20,11 +24,18 @@
             border-radius: 10px;
             border: 1px solid white;
             box-shadow: 0 0 10px white;
+            position: relative;
         }
         .note-title {
             text-align: center;
             font-size: 2em;
             margin-bottom: 20px;
+            animation: flicker 1.5s infinite alternate;
+        }
+        @keyframes flicker {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
         }
         .note-content {
             font-size: 1.2em;
@@ -40,10 +51,12 @@
             border: 1px solid white;
             border-radius: 5px;
             background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
         }
-        @font-face {
-            font-family: 'Determination Mono';
-            src: url('DeterminationMonoWeb.ttf'); /* フォントファイルを追加してください */
+        .note-item img {
+            margin-right: 10px;
+            height: 48px;
         }
     </style>
 </head>
@@ -55,8 +68,8 @@
     <div class="note-area">
         <h1 class="note-title">Undertale風メモ帳</h1>
         <ul class="note-list">
-            <li class="note-item"><span class="note-content">サンプルメモ1</span>: ここにメモ内容を追加</li>
-            <li class="note-item"><span class="note-content">サンプルメモ2</span>: ここにメモ内容を追加</li>
+            <li class="note-item"><img src="face.png" alt="キャラの顔"><span class="note-content">サンプルメモ1</span>: ここにメモ内容を追加</li>
+            <li class="note-item"><img src="face.png" alt="キャラの顔"><span class="note-content">サンプルメモ2</span>: ここにメモ内容を追加</li>
         </ul>
     </div>
 </body>
