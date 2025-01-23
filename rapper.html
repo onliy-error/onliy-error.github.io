@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>挑戦的ラップバトル</title>
+<style>
+    body {
+        background: linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
+        color: #fff;
+        font-family: 'Courier New', Courier, monospace;
+        text-align: center;
+        padding: 50px;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+    button {
+        background-color: #c0392b;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        border-radius: 5px;
+        margin: 10px;
+        cursor: pointer;
+    }
+    .output-container {
+        background-color: rgba(0, 0, 0, 0.7);
+        border-radius: 10px;
+        padding: 20px;
+        width: 80%;
+        margin: 0 auto;
+    }
+    pre {
+        white-space: pre-wrap;
+        text-align: left;
+        background-color: #8e44ad;
+        padding: 20px;
+        border-radius: 10px;
+        width: 100%;
+        color: #fff;
+    }
+</style>
+<script>
+function startBattle() {
+    const output = document.getElementById('output');
+    output.innerText = 'ラップスタイル見せてやるぜ、文字の力！\nHTMLのコード、ビートに乗せ！\nマインクラフト、批判するビート！';
+}
+
+function changeStyle() {
+    const output = document.getElementById('output');
+    output.style.backgroundColor = '#7f8c8d';
+    output.style.color = '#27ae60';
+    output.innerText += '\\nスタイル変えて、もっとキメるぜ！\\n光に満ちて、影を打ち破ろう！';
+}
+
+function addVerse() {
+    const output = document.getElementById('output');
+    output.innerText += '\\n追加スタイル、ヴァース続けて！紫の空に、星の煌めき！\\n批判的なビート、真実を語る！';
+}
+
+function toggleTheme() {
+    const body = document.querySelector('body');
+    body.classList.toggle('dark-theme');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const output = document.getElementById('output');
+    output.innerText = 'ウェルカム！これは挑戦的ラップバトルアリーナ！批判も含めて、真実のビートを刻め！';
+});
+</script>
+</head>
+<body>
+    <h1>挑戦的ラップバトルアリーナ！</h1>
+    <button onclick="startBattle()">バトル開始</button>
+    <button onclick="changeStyle()">スタイルチェンジ</button>
+    <button onclick="addVerse()">ヴァース追加</button>
+    <button onclick="toggleTheme()">テーマ切替</button>
+    <div class="output-container">
+        <pre id="output">&#65279;</pre>
+    </div>
+</body>
+</html>
