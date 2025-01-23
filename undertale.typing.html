@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Undertale Typing Game</title>
+<style>
+    #display {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+    #typed-input {
+        width: 100%;
+        padding: 10px;
+        font-size: 24px;
+    }
+    #score, #timer {
+        font-size: 24px;
+        margin-top: 10px;
+    }
+</style>
+</head>
+<body>
+<h1>Undertale Typing Game</h1>
+<div id="display">ここに文字列が表示されます</div>
+<input type="text" id="typed-input" placeholder="ここに入力してください">
+<div id="score">スコア: 0</div>
+<div id="timer">タイマー: 60秒</div>
+
+<script>
+    const textSamples = [
+        "Undertaleの世界へようこそ",
+        "Sansはいつもジョークを言ってる",
+        "アズゴアとの戦いは避けられない",
+        "パピルスのパズルを解こう",
+        "フラウィーに気をつけて"
+    ];
+    let score = 0;
+    let timer = 60;
+    let currentText = '';
+
+    function getRandomText() {
+        currentText = textSamples[Math.floor(Math.random() * textSamples.length)];
+        document.getElementById('display').innerText = currentText;
+    }
+
+    document.getElementById('typed-input').addEventListener('input', function() {
+        const input = this.value;
+
+        if (input === currentText) {
+            score += 10;
+            document.getElementById('score').innerText = `スコア: ${score}`;
+            this.value = '';
+            getRandomText();
+        }
+    });
+
+    function startTimer() {
+        const timerInterval = setInterval(function() {
+            if (timer > 0) {
+                timer--;
+                document.getElementById('timer').innerText = `タイマー: ${timer}秒`;
+            } else {
+                clearInterval(timerInterval);
+                document.getElementById('typed-input').disabled = true;
+                alert('ゲーム終了！最終スコア: ' + score);
+            }
+        }, 1000);
+    }
+
+    getRandomText();
+    startTimer();
+</script>
+</body>
+</html>
