@@ -4,42 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Undertale風メモ帳</title>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="notepad">
-        <h1>メモ帳</h1>
-        <img src="https://example.com/character.png" alt="Undertaleキャラクター" class="character">
-        <textarea placeholder="ここにメモを入力..."></textarea>
-        <div class="buttons">
-            <button onclick="saveNote()">保存</button>
-            <button onclick="clearNote()">クリア</button>
-            <button onclick="toggleTheme()">テーマ切り替え</button>
+        <header>
+            <img src="chara-icon.png" alt="Chara" class="icon">
+            <h1>Undertale風メモ帳</h1>
+        </header>
+        <textarea placeholder="ここにメモを取ろう..."></textarea>
+        <div class="character-box">
+            <img src="flowey-icon.png" alt="Flowey" class="char-icon">
+            <p>Flowey: Don't you have anything better to do?</p>
         </div>
     </div>
-    <script>
-        function saveNote() {
-            const note = document.querySelector('textarea').value;
-            localStorage.setItem('note', note);
-            alert('メモが保存されました。');
-        }
-
-        function clearNote() {
-            document.querySelector('textarea').value = '';
-            alert('メモがクリアされました。');
-        }
-
-        function toggleTheme() {
-            document.body.classList.toggle('dark-theme');
-        }
-
-        document.addEventListener('DOMContentLoaded', (event) => {
-            const savedNote = localStorage.getItem('note');
-            if (savedNote) {
-                document.querySelector('textarea').value = savedNote;
-            }
-        });
-    </script>
 </body>
 </html>
