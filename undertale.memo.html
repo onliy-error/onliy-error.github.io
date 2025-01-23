@@ -5,72 +5,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Undertale風メモ帳</title>
     <style>
-        @font-face {
-            font-family: 'Determination Mono';
-            src: url('DeterminationMonoWeb.ttf'); /* フォントファイルを追加してください */
-        }
-        body {
-            background-color: black;
-            color: white;
-            font-family: 'Determination Mono', sans-serif;
-            background-image: url('background.png'); /* 適切な背景画像にしてください */
-            background-size: cover;
-        }
-        .note-area {
-            width: 90%;
-            margin: auto;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 20px;
-            border-radius: 10px;
-            border: 1px solid white;
-            box-shadow: 0 0 10px white;
-            position: relative;
-        }
-        .note-title {
-            text-align: center;
-            font-size: 2em;
-            margin-bottom: 20px;
-            animation: flicker 1.5s infinite alternate;
-        }
-        @keyframes flicker {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
-        }
-        .note-content {
-            font-size: 1.2em;
-            line-height: 1.5;
-        }
-        .note-list {
-            list-style: none;
-            padding: 0;
-        }
-        .note-item {
-            margin: 10px 0;
-            padding: 10px;
-            border: 1px solid white;
-            border-radius: 5px;
-            background: rgba(255, 255, 255, 0.1);
-            display: flex;
-            align-items: center;
-        }
-        .note-item img {
-            margin-right: 10px;
-            height: 48px;
-        }
+@font-face {
+    font-family: 'Determination Mono';
+    src: url('DeterminationMonoWeb.ttf'); /* フォントファイルを追加してください */
+}
+body {
+    background-color: black;
+    color: white;
+    font-family: 'Determination Mono', sans-serif;
+    background-image: url('background.png'); /* 適切な背景画像にしてください */
+    background-size: cover;
+}
+.note-area {
+    width: 90%;
+    margin: auto;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid white;
+    box-shadow: 0 0 10px white;
+    position: relative;
+}
+.note-title {
+    text-align: center;
+    font-size: 2em;
+    margin-bottom: 20px;
+    animation: flicker 1.5s infinite alternate;
+}
+@keyframes flicker {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+.note-content {
+    font-size: 1.2em;
+    line-height: 1.5;
+}   
+.note-list {
+    list-style: none;
+    padding: 0;
+}
+.note-item {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid white;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+}
+.note-item img {
+    margin-right: 10px;
+    height: 48px;
+}
     </style>
 </head>
 <body>
-    <audio loop autoplay>
-        <source src="bgm.mp3" type="audio/mpeg"> <!-- 実際のBGMファイルをここに配置してください -->
-        お使いのブラウザはaudioタグをサポートしていません。
-    </audio>
-    <div class="note-area">
-        <h1 class="note-title">Undertale風メモ帳</h1>
-        <ul class="note-list">
-            <li class="note-item"><img src="face.png" alt="キャラの顔"><span class="note-content">サンプルメモ1</span>: ここにメモ内容を追加</li>
-            <li class="note-item"><img src="face.png" alt="キャラの顔"><span class="note-content">サンプルメモ2</span>: ここにメモ内容を追加</li>
-        </ul>
-    </div>
+<audio loop autoplay>
+    <source src="bgm.mp3" type="audio/mpeg"> <!-- 実際のBGMファイルをここに配置してください -->
+    お使いのブラウザはaudioタグをサポートしていません。
+</audio>
+
+<div class="note-area">
+<h1 class="note-title">Undertale風メモ帳</h1>
+<ul class="note-list">
+    <li class="note-item"><img src="face.png" alt="キャラの顔"><span class="note-content">ここにメモ内容を追加</span></li>
+</ul>
+</div>
 </body>
 </html>
