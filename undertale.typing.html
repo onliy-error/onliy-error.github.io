@@ -4,6 +4,11 @@
 <meta charset="UTF-8">
 <title>Undertale Typing Game</title>
 <style>
+    body {
+        font-family: 'Courier New', Courier, monospace;
+        background-color: black;
+        color: white;
+    }
     #display {
         font-size: 24px;
         margin-bottom: 20px;
@@ -12,6 +17,9 @@
         width: 100%;
         padding: 10px;
         font-size: 24px;
+        background-color: black;
+        color: white;
+        border: 1px solid white;
     }
     #score, #timer {
         font-size: 24px;
@@ -21,34 +29,38 @@
 </head>
 <body>
 <h1>Undertale Typing Game</h1>
-<div id="display">ここに文字列が表示されます</div>
+<div id="display">ここにローマ字が表示されます</div>
 <input type="text" id="typed-input" placeholder="ここに入力してください">
 <div id="score">スコア: 0</div>
 <div id="timer">タイマー: 60秒</div>
 
 <script>
     const textSamples = [
-        "Undertaleの世界へようこそ",
-        "Sansはいつもジョークを言ってる",
-        "アズゴアとの戦いは避けられない",
-        "パピルスのパズルを解こう",
-        "フラウィーに気をつけて"
+        ["Undertaleの世界へようこそ", "undetaale no sekai e youkoso"],
+        ["Sansはいつもジョークを言ってる", "Sans wa itsumo jooku wo itteru"],
+        ["アズゴアとの戦いは避けられない", "azugoa to no tatakai wa sakerarenai"],
+        ["パピルスのパズルを解こう", "Papirusu no pazuru wo tokou"],
+        ["フラウィーに気をつけて", "Furauii ni ki wo tsukete"]
     ];
     let score = 0;
     let timer = 60;
     let currentText = '';
 
     function getRandomText() {
-        currentText = textSamples[Math.floor(Math.random() * textSamples.length)];
-        document.getElementById('display').innerText = currentText;
+        const randomIndex = Math.floor(Math.random() * textSamples.length);
+        const [jpText, romajiText] = textSamples[randomIndex];
+        currentText = romajiText;
+        document.getElementById('display').innerText = "\(jpText)\n(\(romajiText))";
+    }
+
+    function updateScore() {
+        document.getElementById('score').innerText = `スコア: ${score}`;
     }
 
     document.getElementById('typed-input').addEventListener('input', function() {
-        const input = this.value;
-
-        if (input === currentText) {
+        if (this.value.trim().toLowerCase() === currentText) {
             score += 10;
-            document.getElementById('score').innerText = `スコア: ${score}`;
+            updateScore();
             this.value = '';
             getRandomText();
         }
