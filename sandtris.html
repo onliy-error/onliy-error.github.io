@@ -21,13 +21,13 @@
       background-color: #fff;
       border: 2px solid #000;
     }
-    .block {
+    .block, .sand {
       position: absolute;
       width: 30px;
       height: 30px;
     }
-    .solid {
-      background-color: #808080; /* 砂の代わりになるブロックの色 */
+    .sand {
+      background-color: #f4a460; /* 砂の色 */
     }
     #scoreBoard {
       position: absolute;
@@ -55,13 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
       [{ x: 0, y: 0 }, { x: 30, y: 0 }, { x: 60, y: 0 }, { x: 30, y: 30 }], // T
       [{ x: 0, y: 0 }, { x: 30, y: 0 }, { x: 30, y: 30 }, { x: 60, y: 30 }]  // Z
     ];
-
-    const COLS = 10;
-    const ROWS = 16;
-    const BLOCK_SIZE = blocks.find(blockColumnsForShape).style.width;
-    const ROW_SIZE = blocks.find(blockColumnsForShape).style.height;
     let blocks = [];
-    let solidBlocks = new Array(COLS).fill().map(() => new Array(ROWS).fill(null));
     let interval = null;
     let score = 0;
     let rotation = 0;
@@ -72,8 +66,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function checkEdgeCollision() {
-      const leftEdgeBlocks = [...document.querySelectorAll('.solid')].filter(block => parseInt(block.style.left) === 0);
-      const rightEdgeBlocks = [...document.querySelectorAll('.solid')].filter(block => parseInt(block.style.left) === 270);
+      const leftEdgeBlocks = Array.from(document.querySelectorAll('.sand')).filter(block => parseInt(block.style.left) === 0);
+      const rightEdgeBlocks = Array.from(document.querySelectorAll('.sand')).filter(block => parseInt(block.style.left) === 270);
       leftEdgeBlocks.forEach(leftBlock => {
         rightEdgeBlocks.forEach(rightBlock => {
           if (leftBlock.style.backgroundColor === rightBlock.style.backgroundColor) {
@@ -104,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
         blocks.forEach(block => {
           const top = parseInt(block.style.top);
           const left = parseInt(block.style.left);
-          const belowBlock = Array.from(document.querySelectorAll('.solid')).find(b => parseInt(b.style.top) === top + 30 && parseInt(b.style.left) === left);
+          const belowBlock = Array.from(document.querySelectorAll('.sand')).find(b => parseInt(b.style.top) === top + 30 && parseInt(b.style.left) === left);
           if (top >= 470 || belowBlock) {
             canMove = false;
           }
@@ -117,46 +111,53 @@ document.addEventListener('DOMContentLoaded', () => {
           });
         } else {
           clearInterval(interval);
-          blocks.forEach(block => changeToSolids(block));
+          blocks.forEach(block => changeToSand(block));
           updateScore();
-          checkEdgeCollision(); // 端同士の色を確認
+          checkEdgeCollision(); // 端同士の色の接触を確認
           createBlock();
           moveBlock();
         }
       }, 500);
     }
 
-    function changeToSolids(block) {
-      const top = parseInt(block.style.top);
-      const left = parseInt(block.style.left);
-      const solid = document.createElement('div');
-      solid.className = 'solid';
-      solid.style.backgroundColor = block.style.backgroundColor;
-      solid.style.top = `${top}px`;
-      solid.style.left = `${left}px`;
-      board.removeChild(block);
-      board.appendChild(solid);
-      solidBlocks[Math.floor(left / BLOCK_SIZE)][Math.floor(top / ROW_SIZE)] = solid;
+    function applyGravity() {
+      const sands = Array.from(document.querySelectorAll('.sand'));
+      sands.forEach(sand => {
+        let top = parseInt(sand.style.top);
+        let belowBlock;
+        do {
+          belowBlock = Array.from(document.querySelectorAll('.sand')).find(b => parseInt(b.style.top) === top + 30 && b.style.left === sand.style.left);
+          if (!belowBlock && top < 470) {
+            top += 30;
+            sand.style.top = `${top}px`;
+          }
+        } while (!belowBlock && top < 470);
+      });
+    }
+
+    function changeToSand(block) {
+      block.classList.add('sand');
+      applyGravity(); // 重力を適用
     }
 
     function rotateBlock(direction) {
       rotation += direction;
-      blocks.forEach(block => block.style.transform = `rotate(${rotation}deg)`);
+      blocks.forEach(block => {
+        block.style.transform = `rotate(${rotation}deg)`;
+      });
     }
 
     function handleKeyPress(e) {
       const moves = { ArrowLeft: -30, ArrowRight: 30 };
       const canMoveHorizontally = (dir) => blocks.every(block => {
         const left = parseInt(block.style.left) + dir;
-        const top = parseInt(block.style.top);
-        return left >= 0 && left < 300 && !solidBlocks[Math.floor((left + dir) / BLOCK_SIZE)][Math.floor(top / ROW_SIZE)];
+        return left >= 0 && left < 300;
       });
 
       if (e.key in moves && canMoveHorizontally(moves[e.key])) {
         blocks.forEach(block => {
-          let left = parseInt(block.style.left);
-          left += moves[e.key];
-          block.style.left = `${left}px`;
+          const left = parseInt(block.style.left);
+          block.style.left = `${left + moves[e.key]}px`;
         });
       } else if (e.key === 'w' || e.key === 'W') {
         rotateBlock(90); // 右回転
