@@ -26,6 +26,9 @@
     width: 30px;
     height: 30px;
   }
+  .solid {
+    background-color: #808080; /* 砂の代わりになるブロックの色 */
+  }
   #scoreBoard {
     position: absolute;
     top: 10px;
@@ -43,76 +46,151 @@
     const board = document.getElementById('gameBoard');
     const scoreBoard = document.getElementById('scoreBoard');
     const colors = ['#ff0000', '#ff7f00', '#ffff00', '#00ff00', '#0000ff', '#4b0082', '#9400d3']; // 7色
-    let block = null;
+    const shapes = [
+      [{ x: 0, y: 0 }, { x: 30, y: 0 }, { x: 60, y: 0 }, { x: 90, y: 0 }], // I
+      [{ x: 0, y: 0 }, { x: 0, y: 30 }, { x: 30, y: 30 }, { x: 60, y: 30 }], // J
+      [{ x: 0, y: 30 }, { x: 30, y: 30 }, { x: 60, y: 30 }, { x: 60, y: 0 }], // L
+      [{ x: 0, y: 0 }, { x: 30, y: 0 }, { x: 0, y: 30 }, { x: 30, y: 30 }], // O
+      [{ x: 0, y: 30 }, { x: 30, y: 30 }, { x: 30, y: 0 }, { x: 60, y: 0 }], // S
+      [{ x: 0, y: 0 }, { x: 30, y: 0 }, { x: 60, y: 0 }, { x: 30, y: 30 }], // T
+      [{ x: 0, y: 0 }, { x: 30, y: 0 }, { x: 30, y: 30 }, { x: 60, y: 30 }]  // Z
+    ];
+    let blocks = [];
     let interval = null;
     let score = 0;
     let rotation = 0;
 
-    function updateScore() {
-      score += 10;
+    function updateScore(points) {
+      score += points;
       scoreBoard.textContent = `スコア: ${score}`;
     }
 
     function createBlock() {
-      block = document.createElement('div');
-      block.className = 'block';
-      block.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-      block.style.top = '0px';
-      block.style.left = '120px';
-      board.appendChild(block);
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      const shape = shapes[Math.floor(Math.random() * shapes.length)];
+      blocks = shape.map(pos => {
+        const block = document.createElement('div');
+        block.className = 'block';
+        block.style.backgroundColor = color;
+        block.style.top = pos.y + 'px';
+        block.style.left = 120 + pos.x + 'px';
+        board.appendChild(block);
+        return block;
+      });
     }
 
     function moveBlock() {
-      let top = 0;
       interval = setInterval(() => {
-        if (top < 470) {
-          top += 30;
-          block.style.top = top + 'px';
+        let canMove = true;
+        blocks.forEach(block => {
+          const top = parseInt(block.style.top);
+          const belowBlock = board.querySelector(`.solid[top="${top + 30}px"][left="${block.style.left}"]`);
+          if (top >= 470 || belowBlock) {
+            canMove = false;
+          }
+        });
+
+        if (canMove) {
+          blocks.forEach(block => {
+            const top = parseInt(block.style.top);
+            block.style.top = top + 30 + 'px';
+          });
         } else {
           clearInterval(interval);
-          updateScore();
-          changeToSand(block);
+          blocks.forEach(block => changeToSolids(block));
+          updateScore(10);
+          checkForMatches();
           createBlock();
           moveBlock();
         }
       }, 500);
     }
 
-    function changeToSand(block) {
-      const sand = document.createElement('div');
-      sand.className = 'block';
-      sand.style.backgroundColor = block.style.backgroundColor;
-      sand.style.top = block.style.top;
-      sand.style.left = block.style.left;
-      sand.classList.add('sand');
-      board.removeChild(block);
-      board.appendChild(sand);
-      applyGravity(sand);
+    function changeToSolids(block) {
+      block.classList.add('solid');
     }
 
-    function applyGravity(sand) {
-      let top = parseInt(sand.style.top);
-      const gravityInterval = setInterval(() => {
-        if (top < 470) {
-          top += 30;
-          sand.style.top = top + 'px';
-        } else {
-          clearInterval(gravityInterval);
+    function checkForMatches() {
+      const allBlocks = [...board.getElementsByClassName('solid')];
+      const rows = Array.from({ length: 17 }, () => []); // 17 rows in 500px height
+      const cols = Array.from({ length: 10 }, () => []); // 10 columns in 300px width
+
+      allBlocks.forEach(block => {
+        const top = parseInt(block.style.top);
+        const left = parseInt(block.style.left);
+        rows[top / 30].push(block);
+        cols[left / 30].push(block);
+      });
+
+      let toRemove = [];
+
+      rows.forEach(row => {
+        let match = row.reduce((acc, block, index, array) => {
+          const prev = array[index - 1];
+          if (prev && prev.style.backgroundColor === block.style.backgroundColor) {
+            acc.push(block);
+          } else if (acc.length >= 4) {
+            acc.push(prev);
+            acc.forEach(b => toRemove.push(b));
+            acc = [block];
+          } else {
+            acc = [block];
+          }
+          return acc;
+        }, []);
+
+        if (match.length >= 4) {
+          toRemove = toRemove.concat(match);
         }
-      }, 500);
+      });
+
+      cols.forEach(col => {
+        let match = col.reduce((acc, block, index, array) => {
+          const prev = array[index - 1];
+          if (prev && prev.style.backgroundColor === block.style.backgroundColor) {
+            acc.push(block);
+          } else if (acc.length >= 4) {
+            acc.push(prev);
+            acc.forEach(b => toRemove.push(b));
+            acc = [block];
+          } else {
+            acc = [block];
+          }
+          return acc;
+        }, []);
+
+        if (match.length >= 4) {
+          toRemove = toRemove.concat(match);
+        }
+      });
+
+      toRemove = [...new Set(toRemove)];
+
+      if (toRemove.length > 0) {
+        updateScore(toRemove.length * 10);
+        toRemove.forEach(block => board.removeChild(block));
+      }
     }
 
     function rotateBlock(direction) {
       rotation += direction;
-      block.style.transform = `rotate(${rotation}deg)`;
+      blocks.forEach(block => {
+        block.style.transform = `rotate(${rotation}deg)`;
+      });
     }
 
     function handleKeyPress(e) {
-      const left = parseInt(block.style.left);
-      if (e.key === 'ArrowLeft' && left > 0) {
-        block.style.left = left - 30 + 'px';
-      } else if (e.key === 'ArrowRight' && left < 270) {
-        block.style.left = left + 30 + 'px';
+      const moves = { ArrowLeft: -30, ArrowRight: 30 };
+      const canMoveHorizontally = (dir) => blocks.every(block => {
+        const left = parseInt(block.style.left) + dir;
+        return left >= 0 && left < 300;
+      });
+
+      if (e.key in moves && canMoveHorizontally(moves[e.key])) {
+        blocks.forEach(block => {
+          const left = parseInt(block.style.left);
+          block.style.left = left + moves[e.key] + 'px';
+        });
       } else if (e.key === 'w' || e.key === 'W') {
         rotateBlock(90); // 右回転
       } else if (e.key === 'q' || e.key === 'Q') {
