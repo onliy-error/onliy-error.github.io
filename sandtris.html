@@ -21,13 +21,16 @@
       background-color: #fff;
       border: 2px solid #000;
     }
-    .block {
+    .block, .sand {
       position: absolute;
       width: 30px;
       height: 30px;
     }
-    .sand {
-      background-color: #f4a460;
+    .minisand {
+      width: 3px; /* 小さい砂粒のサイズ */
+      height: 3px; /* 小さい砂粒のサイズ */
+      background-color: #f4a460; /* 砂の色 */
+      position: absolute;
     }
     #scoreBoard {
       position: absolute;
@@ -43,147 +46,144 @@
 </div>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    const board = document.getElementById('gameBoard');
-    const scoreBoard = document.getElementById('scoreBoard');
-    const colors = ['#ff0000', '#ff7f00', '#ffff00', '#00ff00', '#0000ff', '#4b0082', '#9400d3'];
-    const shapes = [
-      [{ x: 0, y: 0 }, { x: 30, y: 0 }, { x: 60, y: 0 }, { x: 90, y: 0 }],
-      [{ x: 0, y: 0 }, { x: 0, y: 30 }, { x: 30, y: 30 }, { x: 60, y: 30 }],
-      [{ x: 0, y: 30 }, { x: 30, y: 30 }, { x: 60, y: 30 }, { x: 60, y: 0 }],
-      [{ x: 0, y: 0 }, { x: 30, y: 0 }, { x: 0, y: 30 }, { x: 30, y: 30 }],
-      [{ x: 0, y: 30 }, { x: 30, y: 30 }, { x: 30, y: 0 }, { x: 60, y: 0 }],
-      [{ x: 0, y: 0 }, { x: 30, y: 0 }, { x: 60, y: 0 }, { x: 30, y: 30 }],
-      [{ x: 0, y: 0 }, { x: 30, y: 0 }, { x: 30, y: 30 }, { x: 60, y: 30 }]
-    ];
-    let blocks = [];
-    let interval = null;
-    let score = 0;
-    let rotation = 0;
+  const board = document.getElementById('gameBoard');
+  const scoreBoard = document.getElementById('scoreBoard');
+  const colors = ['#ff0000', '#ff7f00', '#ffff00', '#00ff00', '#0000ff', '#4b0082', '#9400d3'];
+  const shapes = [
+    [{ x: 0, y: 0 }, { x: 30, y: 0 }, { x: 60, y: 0 }, { x: 90, y: 0 }],
+    [{ x: 0, y: 0 }, { x: 0, y: 30 }, { x: 30, y: 30 }, { x: 60, y: 30 }],
+    [{ x: 0, y: 30 }, { x: 30, y: 30 }, { x: 60, y: 30 }, { x: 60, y: 0 }],
+    [{ x: 0, y: 0 }, { x: 30, y: 0 }, { x: 0, y: 30 }, { x: 30, y: 30 }],
+    [{ x: 0, y: 30 }, { x: 30, y: 30 }, { x: 30, y: 0 }, { x: 60, y: 0 }],
+    [{ x: 0, y: 0 }, { x: 30, y: 0 }, { x: 60, y: 0 }, { x: 30, y: 30 }],
+    [{ x: 0, y: 0 }, { x: 30, y: 0 }, { x: 30, y: 30 }, { x: 60, y: 30 }]
+  ];
+  let blocks = [];
+  let interval = null;
+  let score = 0;
+  let rotation = 0;
 
-    function updateScore() {
-      score += 10;
-      scoreBoard.textContent = `スコア: ${score}`;
-    }
+  function updateScore() {
+    score += 10;
+    scoreBoard.textContent = `スコア: ${score}`;
+  }
 
-    function checkLineCompletion() {
-      for (let y = 0; y <= 470; y += 30) {
-        const rowBlocks = Array.from(document.querySelectorAll('.sand')).filter(block => parseInt(block.style.top) === y);
-        if (rowBlocks.length === 10) {
-          rowBlocks.forEach(block => {
-            board.removeChild(block);
-          });
-          Array.from(document.querySelectorAll('.sand')).forEach(sand => {
-            const top = parseInt(sand.style.top);
-            if (top < y) {
-              sand.style.top = (top + 30) + 'px';
-            }
-          });
-        }
+  function checkLineCompletion() {
+    for (let y = 0; y <= 470; y += 30) {
+      const rowBlocks = Array.from(document.querySelectorAll('.minisand')).filter(block => Math.abs(parseInt(block.style.top) - y) < 15);
+      if (rowBlocks.length >= 100) {
+        rowBlocks.forEach(block => {
+          board.removeChild(block);
+        });
+        Array.from(document.querySelectorAll('.minisand')).forEach(sand => {
+          const top = parseInt(sand.style.top);
+          if (top < y) {
+            sand.style.top = (top + 30) + 'px';
+          }
+        });
       }
     }
+  }
 
-    function createBlock() {
-      const color = colors[Math.floor(Math.random() * colors.length)];
-      const shape = shapes[Math.floor(Math.random() * shapes.length)];
-      blocks = shape.map(pos => {
-        const block = document.createElement('div');
-        block.className = 'block';
-        block.style.backgroundColor = color;
-        block.style.top = pos.y + 'px';
-        block.style.left = 120 + pos.x + 'px';
-        board.appendChild(block);
-        return block;
+  function createBlock() {
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    const shape = shapes[Math.floor(Math.random() * shapes.length)];
+    blocks = shape.map(pos => {
+      const block = document.createElement('div');
+      block.className = 'block';
+      block.style.backgroundColor = color;
+      block.style.top = pos.y + 'px';
+      block.style.left = 120 + pos.x + 'px';
+      board.appendChild(block);
+      return block;
+    });
+  }
+
+  function moveBlock() {
+    interval = setInterval(() => {
+      let canMove = true;
+      blocks.forEach(block => {
+        const top = parseInt(block.style.top);
+        const left = parseInt(block.style.left);
+        const belowBlock = Array.from(document.querySelectorAll('.sand, .minisand')).find(b => Math.abs(parseInt(b.style.top) - (top + 30)) < 30 && parseInt(b.style.left) === left);
+        if (top >= 470 || belowBlock) {
+          canMove = false;
+        }
       });
-    }
 
-    function moveBlock() {
-      interval = setInterval(() => {
-        let canMove = true;
+      if (canMove) {
         blocks.forEach(block => {
           const top = parseInt(block.style.top);
-          const left = parseInt(block.style.left);
-          const belowBlock = Array.from(document.querySelectorAll('.sand')).find(b => parseInt(b.style.top) === top + 30 && parseInt(b.style.left) === left);
-          if (top >= 470 || belowBlock) {
-            canMove = false;
-          }
+          block.style.top = top + 30 + 'px';
         });
+      } else {
+        clearInterval(interval);
+        blocks.forEach(block => changeToMiniSand(block));
+        checkLineCompletion();
+        createBlock();
+        moveBlock();
+      }
+    }, 500);
+  }
 
-        if (canMove) {
-          blocks.forEach(block => {
-            const top = parseInt(block.style.top);
-            block.style.top = top + 30 + 'px';
-          });
-        } else {
-          clearInterval(interval);
-          blocks.forEach(block => changeToSand(block));
-          checkLineCompletion(); // 揃った列を確認して消去
-          createBlock();
-          moveBlock();
+  function changeToMiniSand(block) {
+    for (let i = 0; i < 100; i++) {
+      const miniSand = document.createElement('div');
+      miniSand.className = 'minisand';
+      miniSand.style.top = (parseInt(block.style.top) + Math.floor(Math.random() * 30 - 15)) + 'px';
+      miniSand.style.left = (parseInt(block.style.left) + Math.floor(Math.random() * 30 - 15)) + 'px';
+      board.appendChild(miniSand);
+    }
+    board.removeChild(block);
+    applyGravity();
+  }
+
+  function applyGravity() {
+    const sands = Array.from(document.querySelectorAll('.minisand'));
+    sands.forEach(sand => {
+      let top = parseInt(sand.style.top);
+      let belowBlock;
+      do {
+        belowBlock = Array.from(document.querySelectorAll('.sand, .minisand')).find(b => Math.abs(parseInt(b.style.top) - (top + 3)) < 3 && b.style.left === sand.style.left);
+        if (!belowBlock && top < 470) {
+          top += 3;
+          sand.style.top = top + 'px';
         }
-      }, 500);
-    }
+      } while (!belowBlock && top < 470);
+    });
+  }
 
-    function applyGravity() {
-      const sands = Array.from(document.querySelectorAll('.sand'));
-      sands.forEach(sand => {
-        let top = parseInt(sand.style.top);
-        let belowBlock;
-        do {
-          belowBlock = Array.from(document.querySelectorAll('.sand')).find(b => parseInt(b.style.top) === top + 10 && b.style.left === sand.style.left);
-          if (!belowBlock && top < 490) {
-            top += 10;
-            sand.style.top = top + 'px';
-          }
-        } while (!belowBlock && top < 490);
-      });
-    }
+  function rotateBlock(direction) {
+    rotation += direction;
+    blocks.forEach(block => {
+      block.style.transform = `rotate(${rotation}deg)`;
+    });
+  }
 
-    function changeToSand(block) {
-      for (let i = 0; i < 100; i++) {
-        const sand = document.createElement('div');
-        sand.className = 'sand';
-        sand.style.width = '3px';
-        sand.style.height = '3px';
-        sand.style.backgroundColor = block.style.backgroundColor;
-        sand.style.top = (parseInt(block.style.top) + Math.floor(Math.random() * 27)) + 'px';
-        sand.style.left = (parseInt(block.style.left) + Math.floor(Math.random() * 27)) + 'px';
-        board.appendChild(sand);
-      }
-      board.removeChild(block);
-      applyGravity(); // 重力を適用
-    }
+  function handleKeyPress(e) {
+    const moves = { ArrowLeft: -30, ArrowRight: 30 };
+    const canMoveHorizontally = (dir) => blocks.every(block => {
+      const left = parseInt(block.style.left) + dir;
+      return left >= 0 && left < 300;
+    });
 
-    function rotateBlock(direction) {
-      rotation += direction;
+    if (e.key in moves && canMoveHorizontally(moves[e.key])) {
       blocks.forEach(block => {
-        block.style.transform = `rotate(${rotation}deg)`;
+        const left = parseInt(block.style.left);
+        block.style.left = left + moves[e.key] + 'px';
       });
+    } else if (e.key === 'w' || e.key === 'W') {
+      rotateBlock(90); // 右回転
+    } else if (e.key === 'q' || e.key === 'Q') {
+      rotateBlock(-90); // 左回転
     }
+  }
 
-    function handleKeyPress(e) {
-      const moves = { ArrowLeft: -30, ArrowRight: 30 };
-      const canMoveHorizontally = (dir) => blocks.every(block => {
-        const left = parseInt(block.style.left) + dir;
-        return left >= 0 && left < 300;
-      });
+  document.addEventListener('keydown', handleKeyPress);
 
-      if (e.key in moves && canMoveHorizontally(moves[e.key])) {
-        blocks.forEach(block => {
-          const left = parseInt(block.style.left);
-          block.style.left = left + moves[e.key] + 'px';
-        });
-      } else if (e.key === 'w' || e.key === 'W') {
-        rotateBlock(90); // 右回転
-      } else if (e.key === 'q' || e.key === 'Q') {
-        rotateBlock(-90); // 左回転
-      }
-    }
-
-    document.addEventListener('keydown', handleKeyPress);
-
-    createBlock();
-    moveBlock();
-  });
+  createBlock();
+  moveBlock();
+});
 </script>
 </body>
 </html>
