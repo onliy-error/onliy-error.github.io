@@ -21,13 +21,13 @@
       background-color: #fff;
       border: 2px solid #000;
     }
-    .block, .sand {
+    .block {
       position: absolute;
       width: 30px;
       height: 30px;
     }
     .sand {
-      background-color: #f4a460; /* 砂の色 */
+      background-color: #f4a460;
     }
     #scoreBoard {
       position: absolute;
@@ -45,15 +45,15 @@
 document.addEventListener('DOMContentLoaded', () => {
     const board = document.getElementById('gameBoard');
     const scoreBoard = document.getElementById('scoreBoard');
-    const colors = ['#ff0000', '#ff7f00', '#ffff00', '#00ff00', '#0000ff', '#4b0082', '#9400d3']; // 7色
+    const colors = ['#ff0000', '#ff7f00', '#ffff00', '#00ff00', '#0000ff', '#4b0082', '#9400d3'];
     const shapes = [
-      [{ x: 0, y: 0 }, { x: 30, y: 0 }, { x: 60, y: 0 }, { x: 90, y: 0 }], // I
-      [{ x: 0, y: 0 }, { x: 0, y: 30 }, { x: 30, y: 30 }, { x: 60, y: 30 }], // J
-      [{ x: 0, y: 30 }, { x: 30, y: 30 }, { x: 60, y: 30 }, { x: 60, y: 0 }], // L
-      [{ x: 0, y: 0 }, { x: 30, y: 0 }, { x: 0, y: 30 }, { x: 30, y: 30 }], // O
-      [{ x: 0, y: 30 }, { x: 30, y: 30 }, { x: 30, y: 0 }, { x: 60, y: 0 }], // S
-      [{ x: 0, y: 0 }, { x: 30, y: 0 }, { x: 60, y: 0 }, { x: 30, y: 30 }], // T
-      [{ x: 0, y: 0 }, { x: 30, y: 0 }, { x: 30, y: 30 }, { x: 60, y: 30 }]  // Z
+      [{ x: 0, y: 0 }, { x: 30, y: 0 }, { x: 60, y: 0 }, { x: 90, y: 0 }],
+      [{ x: 0, y: 0 }, { x: 0, y: 30 }, { x: 30, y: 30 }, { x: 60, y: 30 }],
+      [{ x: 0, y: 30 }, { x: 30, y: 30 }, { x: 60, y: 30 }, { x: 60, y: 0 }],
+      [{ x: 0, y: 0 }, { x: 30, y: 0 }, { x: 0, y: 30 }, { x: 30, y: 30 }],
+      [{ x: 0, y: 30 }, { x: 30, y: 30 }, { x: 30, y: 0 }, { x: 60, y: 0 }],
+      [{ x: 0, y: 0 }, { x: 30, y: 0 }, { x: 60, y: 0 }, { x: 30, y: 30 }],
+      [{ x: 0, y: 0 }, { x: 30, y: 0 }, { x: 30, y: 30 }, { x: 60, y: 30 }]
     ];
     let blocks = [];
     let interval = null;
@@ -65,17 +65,21 @@ document.addEventListener('DOMContentLoaded', () => {
       scoreBoard.textContent = `スコア: ${score}`;
     }
 
-    function checkEdgeCollision() {
-      const leftEdgeBlocks = Array.from(document.querySelectorAll('.sand')).filter(block => parseInt(block.style.left) === 0);
-      const rightEdgeBlocks = Array.from(document.querySelectorAll('.sand')).filter(block => parseInt(block.style.left) === 270);
-      leftEdgeBlocks.forEach(leftBlock => {
-        rightEdgeBlocks.forEach(rightBlock => {
-          if (leftBlock.style.backgroundColor === rightBlock.style.backgroundColor) {
-            board.removeChild(leftBlock);
-            board.removeChild(rightBlock);
-          }
-        });
-      });
+    function checkLineCompletion() {
+      for (let y = 0; y <= 470; y += 30) {
+        const rowBlocks = Array.from(document.querySelectorAll('.sand')).filter(block => parseInt(block.style.top) === y);
+        if (rowBlocks.length === 10) {
+          rowBlocks.forEach(block => {
+            board.removeChild(block);
+          });
+          Array.from(document.querySelectorAll('.sand')).forEach(sand => {
+            const top = parseInt(sand.style.top);
+            if (top < y) {
+              sand.style.top = (top + 30) + 'px';
+            }
+          });
+        }
+      }
     }
 
     function createBlock() {
@@ -85,8 +89,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const block = document.createElement('div');
         block.className = 'block';
         block.style.backgroundColor = color;
-        block.style.top = `${pos.y}px`;
-        block.style.left = `${120 + pos.x}px`;
+        block.style.top = pos.y + 'px';
+        block.style.left = 120 + pos.x + 'px';
         board.appendChild(block);
         return block;
       });
@@ -107,13 +111,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (canMove) {
           blocks.forEach(block => {
             const top = parseInt(block.style.top);
-            block.style.top = `${top + 30}px`;
+            block.style.top = top + 30 + 'px';
           });
         } else {
           clearInterval(interval);
           blocks.forEach(block => changeToSand(block));
-          updateScore();
-          checkEdgeCollision(); // 端同士の色の接触を確認
+          checkLineCompletion(); // 揃った列を確認して消去
           createBlock();
           moveBlock();
         }
@@ -126,17 +129,27 @@ document.addEventListener('DOMContentLoaded', () => {
         let top = parseInt(sand.style.top);
         let belowBlock;
         do {
-          belowBlock = Array.from(document.querySelectorAll('.sand')).find(b => parseInt(b.style.top) === top + 30 && b.style.left === sand.style.left);
-          if (!belowBlock && top < 470) {
-            top += 30;
-            sand.style.top = `${top}px`;
+          belowBlock = Array.from(document.querySelectorAll('.sand')).find(b => parseInt(b.style.top) === top + 10 && b.style.left === sand.style.left);
+          if (!belowBlock && top < 490) {
+            top += 10;
+            sand.style.top = top + 'px';
           }
-        } while (!belowBlock && top < 470);
+        } while (!belowBlock && top < 490);
       });
     }
 
     function changeToSand(block) {
-      block.classList.add('sand');
+      for (let i = 0; i < 100; i++) {
+        const sand = document.createElement('div');
+        sand.className = 'sand';
+        sand.style.width = '3px';
+        sand.style.height = '3px';
+        sand.style.backgroundColor = block.style.backgroundColor;
+        sand.style.top = (parseInt(block.style.top) + Math.floor(Math.random() * 27)) + 'px';
+        sand.style.left = (parseInt(block.style.left) + Math.floor(Math.random() * 27)) + 'px';
+        board.appendChild(sand);
+      }
+      board.removeChild(block);
       applyGravity(); // 重力を適用
     }
 
@@ -157,7 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (e.key in moves && canMoveHorizontally(moves[e.key])) {
         blocks.forEach(block => {
           const left = parseInt(block.style.left);
-          block.style.left = `${left + moves[e.key]}px`;
+          block.style.left = left + moves[e.key] + 'px';
         });
       } else if (e.key === 'w' || e.key === 'W') {
         rotateBlock(90); // 右回転
