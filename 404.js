@@ -14,7 +14,7 @@
 
             const header = document.createElement('div');
             header.className = 'message-box-header';
-            header.innerHTML = `メッセージ ${index}`;
+            header.innerHTML = `404エラー ${index}`;
 
             const closeButton = document.createElement('button');
             closeButton.className = 'close-btn';
@@ -25,10 +25,10 @@
 
             const body = document.createElement('div');
             body.className = 'message-box-body';
-            body.innerHTML = 'あなたの電子機器が壊れそうです<br>※ジョークです';
-            const img = document.createElement('img');
+            body.innerHTML = '404<br>指定したページは見つかりませんでした';
+            const img = document.createElement('img');/*
             img.src = 'image/error.png'; // error.png へのパスを指定
-            img.alt = 'エラー画像';
+            img.alt = 'エラー画像';*/
 
             body.appendChild(img);
             header.appendChild(closeButton);
