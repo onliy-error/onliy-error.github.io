@@ -8,6 +8,7 @@ canvas.width = cols * cellSize;
 canvas.height = rows * cellSize;
 
 let grid = createGrid();
+let running = false;
 
 function createGrid() {
     return new Array(rows).fill(null).map(() => new Array(cols).fill(0));
@@ -61,9 +62,10 @@ function countAliveNeighbors(grid, row, col) {
 }
 
 function update() {
+    if (!running) return;
     grid = getNextGeneration(grid);
     drawGrid();
-    requestAnimationFrame(update);
+    setTimeout(update, 100);
 }
 
 canvas.addEventListener('click', (e) => {
@@ -74,5 +76,11 @@ canvas.addEventListener('click', (e) => {
     drawGrid();
 });
 
+document.getElementById('startButton').addEventListener('click', () => {
+    running = !running;
+    if (running) {
+        update();
+    }
+});
+
 drawGrid();
-requestAnimationFrame(update);
