@@ -29,19 +29,28 @@
 <body>
     <script>
         const characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!?$%@';
+        const usedPositions = new Set();
         const createMatrix = () => {
             const matrix = document.createElement('div');
             matrix.className = 'matrix';
-            matrix.style.left = `${Math.floor(Math.random() * 100)}vw`;
+            let leftPosition;
+            do {
+                leftPosition = Math.floor(Math.random() * 100);
+            } while (usedPositions.has(leftPosition));
+            usedPositions.add(leftPosition);
+            matrix.style.left = `${leftPosition}vw`;
             matrix.style.fontSize = `${Math.random() * 10 + 20}px`;
             matrix.style.animationDuration = `${Math.random() * 3 + 2}s`;
-            matrix.innerHTML = Array.from({ length: Math.floor(Math.random() * 9) + 12 }, () =>
+            matrix.innerHTML = Array.from({ length: Math.floor(Math.random() * 9) + 12 }, () => 
                 characters[Math.floor(Math.random() * characters.length)]
             ).join('<br>');
             document.body.appendChild(matrix);
-            matrix.addEventListener('animationend', () => matrix.remove());
+            matrix.addEventListener('animationend', () => {
+                matrix.remove();
+                usedPositions.delete(leftPosition);
+            });
         };
-        setInterval(createMatrix, 500);
+        setInterval(createMatrix, 150); // 降ってくる量を増やす
     </script>
 </body>
 </html>
