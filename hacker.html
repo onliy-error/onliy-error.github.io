@@ -17,11 +17,15 @@
             top: -100px;
             color: #00FF00; /* 明るい緑色 */
             opacity: 1;
-            animation: fall linear forwards;
+            animation: fall linear forwards, glow 1.5s infinite alternate; /* 追加 */
         }
         @keyframes fall {
             0% { top: -100px; opacity: 1; }
             100% { top: 100vh; opacity: 0; }
+        }
+        @keyframes glow { /* 追加 */
+            0% { text-shadow: 0 0 5px #00FF00, 0 0 10px #00FF00, 0 0 15px #00FF00, 0 0 20px #00FF00, 0 0 25px #00FF00; }
+            100% { text-shadow: 0 0 10px #00FF00, 0 0 20px #00FF00, 0 0 30px #00FF00, 0 0 40px #00FF00, 0 0 50px #00FF00; }
         }
     </style>
 </head>
