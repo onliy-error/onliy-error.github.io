@@ -18,7 +18,7 @@
             color: #00FF00;
             animation: fall linear forwards;
             opacity: 1;
-            text-shadow: 0 0 3px #00FF00; /* 光の効果を控えめに */
+            text-shadow: 0 0 3px #00FF00;
         }
         @keyframes fall {
             0% { top: -100px; opacity: 1; }
@@ -28,30 +28,20 @@
 </head>
 <body>
     <script>
-        const characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz！？＄＆％＠';
-        const usedPositions = new Set();
+        const characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!?$%@';
         const createMatrix = () => {
             const matrix = document.createElement('div');
             matrix.className = 'matrix';
-            let leftPosition;
-            do {
-                leftPosition = Math.floor(Math.random() * 100);
-            } while (usedPositions.has(leftPosition));
-            usedPositions.add(leftPosition);
-            matrix.style.left = `${leftPosition}vw`;
+            matrix.style.left = `${Math.floor(Math.random() * 100)}vw`;
             matrix.style.fontSize = `${Math.random() * 10 + 20}px`;
             matrix.style.animationDuration = `${Math.random() * 3 + 2}s`;
-            const textArray = Array.from({ length: Math.floor(Math.random() * 9) + 12 }, () => 
+            matrix.innerHTML = Array.from({ length: Math.floor(Math.random() * 9) + 12 }, () =>
                 characters[Math.floor(Math.random() * characters.length)]
-            );
-            matrix.innerHTML = textArray.join('<br>');
+            ).join('<br>');
             document.body.appendChild(matrix);
-            matrix.addEventListener('animationend', () => {
-                matrix.remove();
-                usedPositions.delete(leftPosition);
-            });
-        }
-        setInterval(createMatrix, 300);
+            matrix.addEventListener('animationend', () => matrix.remove());
+        };
+        setInterval(createMatrix, 500);
     </script>
 </body>
 </html>
