@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>hacker</title>
+    <title>ʰᵃᶜᵏᵉʳ ⁱⁿᶜᵃⁿᵗᵃᵗⁱᵒⁿ</title>
     <style>
         body {
             margin: 0;
@@ -16,7 +16,7 @@
             top: -100px;
             color: #00FF00; /* 明るい緑色 */
             opacity: 1;
-            animation: fall 3s linear forwards;
+            animation: fall linear forwards;
         }
         @keyframes fall {
             0% { top: -100px; opacity: 1; }
@@ -27,16 +27,26 @@
 <body>
     <script>
         const characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+        const usedPositions = new Set(); // 使用済み位置を記録
         const createMatrix = () => {
             const matrix = document.createElement('div');
             matrix.className = 'matrix';
-            matrix.style.left = `${Math.random() * 100}vw`; // ランダムな位置から開始
+            let leftPosition;
+            do {
+                leftPosition = Math.floor(Math.random() * 100);
+            } while (usedPositions.has(leftPosition)); // 位置が重ならないようにする
+            usedPositions.add(leftPosition);
+            matrix.style.left = `${leftPosition}vw`;
             matrix.style.fontSize = `${Math.random() * 10 + 15}px`; // 大きさを調整
+            matrix.style.animationDuration = `${Math.random() * 3 + 2}s`; // 落ちるスピードを調整
             matrix.innerHTML = Array.from({ length: Math.floor(Math.random() * 9) + 12 }, () => characters[Math.floor(Math.random() * characters.length)]).join('<br>');
             document.body.appendChild(matrix);
 
             // アニメーション終了後に要素を削除
-            matrix.addEventListener('animationend', () => matrix.remove());
+            matrix.addEventListener('animationend', () => {
+                matrix.remove();
+                usedPositions.delete(leftPosition); // 使用済み位置を解放
+            });
         }
 
         setInterval(createMatrix, 50); // より多くの文字を降らせる
