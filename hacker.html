@@ -36,7 +36,7 @@
             let leftPosition;
             do {
                 leftPosition = Math.floor(Math.random() * 100);
-            } while (usedPositions.has(leftPosition) || [...usedPositions].some(pos => Math.abs(pos - leftPosition) < 5));
+            } while (usedPositions.has(leftPosition) || [...usedPositions].some(pos => Math.abs(pos - leftPosition) < 10)); // 少し広めに間を取る
             usedPositions.add(leftPosition);
             matrix.style.left = `${leftPosition}vw`;
             matrix.style.fontSize = `${Math.random() * 10 + 20}px`;
