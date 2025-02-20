@@ -6,7 +6,7 @@
     <title>ɥʇɐǝꓷ ɟo uǝǝɹɔS ǝnןꓭ</title>
     <style>
         body {
-            background-color: #1A73E8; /* 本物のブルースクリーンに近い色 */
+            background-color: #1E4D8A; /* 本物のブルースクリーンに近い色 */
             color: white;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
@@ -22,19 +22,21 @@
         }
         .sad-face {
             position: absolute;
-            top: 20px;
-            left: 20px;
-            font-size: 72px; /* 文字を大きく */
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 96px; /* 文字を大きく */
         }
         h1 {
-            font-size: 24px;
+            font-size: 22px;
+            margin-top: 20px;
         }
         p {
             font-size: 18px;
         }
         #progress-text {
             margin-top: 20px;
-            font-size: 24px;
+            font-size: 22px;
         }
     </style>
     <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
@@ -52,12 +54,13 @@
         const progressText = document.getElementById('progress-text');
 
         function updateProgress() {
-            if (progress < 100) {
-                progress++;
+            if (progress <= 99) {
                 progressText.textContent = progress + '%';
+                progress++;
                 const randomInterval = Math.random() * 500 + 250; // 0.25秒から0.75秒のランダムな間隔
                 setTimeout(updateProgress, randomInterval);
             } else {
+                progressText.textContent = '100%';
                 setTimeout(() => {
                     window.location.href = 'index.html';
                 }, 500); // 100%になったら0.5秒後にリダイレクト
@@ -72,7 +75,7 @@
             width: 128,
             height: 128,
             colorDark : '#ffffff',
-            colorLight : '#1A73E8'
+            colorLight : '#1E4D8A'
         });
     </script>
 </body>
