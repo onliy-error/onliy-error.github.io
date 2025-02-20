@@ -21,7 +21,7 @@
         @keyframes fall {
             0% { top: -100px; opacity: 1; }
             90% { opacity: 0.2; }
-            100% { top: 100vh; opacity: 0; }
+            100% { top: 100vh; opacity: 0; display: none; }
         }
         @keyframes glow {
             0% { text-shadow: 0 0 10px #00FF00, 0 0 20px #00FF00, 0 0 30px #00FF00; }
@@ -36,8 +36,8 @@
             const matrix = document.createElement('div');
             matrix.className = 'matrix';
             matrix.style.left = `${Math.random() * 100}vw`; // ランダムな位置から開始
-            matrix.style.fontSize = `${Math.random() * 20 + 10}px`;
-            matrix.innerHTML = Array.from({ length: 20 }, () => characters[Math.floor(Math.random() * characters.length)]).join('<br>');
+            matrix.style.fontSize = '20px'; // 大きさを調整
+            matrix.innerHTML = Array.from({ length: Math.floor(Math.random() * 5) + 6 }, () => characters[Math.floor(Math.random() * characters.length)]).join('<br>');
             document.body.appendChild(matrix);
 
             setTimeout(() => {
