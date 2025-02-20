@@ -6,7 +6,7 @@
     <title>ɥʇɐǝꓷ ɟo uǝǝɹɔS ǝnןꓭ</title>
     <style>
         body {
-            background-color: #1e4d8a; /* Windowsブルースクリーンの色 */
+            background-color: #1E4D8A; /* Windowsブルースクリーンの色 */
             color: white;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
@@ -55,7 +55,8 @@
             if (progress < 100) {
                 progress++;
                 progressText.textContent = progress + '%';
-                setTimeout(updateProgress, 50); // 0.05秒ごとに1％進む
+                const randomInterval = Math.random() * 500 + 500; // 0.5秒から1秒のランダムな間隔
+                setTimeout(updateProgress, randomInterval);
             } else {
                 setTimeout(() => {
                     window.location.href = 'index.html';
@@ -71,7 +72,7 @@
             width: 128,
             height: 128,
             colorDark : '#ffffff',
-            colorLight : '#1e4d8a'
+            colorLight : '#1E4D8A'
         });
     </script>
 </body>
