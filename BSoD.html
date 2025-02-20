@@ -55,7 +55,7 @@
             if (progress < 100) {
                 progress++;
                 progressText.textContent = progress + '%';
-                const randomInterval = Math.random() * 750 + 250; // 0.25秒から1秒のランダムな間隔
+                const randomInterval = Math.random() * 500 + 250; // 0.25秒から0.75秒のランダムな間隔
                 setTimeout(updateProgress, randomInterval);
             } else {
                 setTimeout(() => {
