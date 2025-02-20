@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>マトリックス風エフェクト</title>
+    <style>
+        body {
+            margin: 0;
+            background: black;
+            overflow: hidden;
+            color: green;
+            font-family: monospace;
+        }
+        .matrix {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            font-size: 20px;
+            opacity: 0;
+            animation: fall 5s linear infinite;
+        }
+        @keyframes fall {
+            0% { top: -100px; opacity: 1; }
+            90% { opacity: 0.2; }
+            100% { top: 100vh; opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <script>
+        const characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+        const createMatrix = () => {
+            const matrix = document.createElement('div');
+            matrix.className = 'matrix';
+            matrix.style.fontSize = `${Math.random() * 20 + 10}px`;
+            matrix.innerText = Array.from({ length: 10 }, () => characters[Math.floor(Math.random() * characters.length)]).join('');
+            document.body.appendChild(matrix);
+
+            setTimeout(() => {
+                matrix.remove();
+            }, 5000);
+        }
+
+        setInterval(createMatrix, 200);
+    </script>
+</body>
+</html>
