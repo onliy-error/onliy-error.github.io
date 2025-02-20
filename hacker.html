@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ʰᵃᶜᵏᵉʳ ⁱⁿᶜᵃⁿᵗᵃᵗⁱᵒⁿ</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap'); /* ハッカーっぽいフォント */
         body {
             margin: 0;
             background: black;
             overflow: hidden;
-            font-family: monospace;
+            font-family: 'Share Tech Mono', monospace;
         }
         .matrix {
             position: absolute;
@@ -26,7 +27,7 @@
 </head>
 <body>
     <script>
-        const characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+        const characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*()_+-={}[]|:;"\'<>,.?/'; // 記号を追加
         const usedPositions = new Set(); // 使用済み位置を記録
         const createMatrix = () => {
             const matrix = document.createElement('div');
