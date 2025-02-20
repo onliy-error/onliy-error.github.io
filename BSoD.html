@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ブルースクリーン風ページ</title>
+    <title>ɥʇɐǝꓷ ɟo uǝǝɹɔS ǝnןꓭ</title>
     <style>
         body {
             background-color: #0000ff;
@@ -15,9 +15,16 @@
             height: 100vh;
             margin: 0;
             text-align: center;
+            position: relative;
         }
         .content {
             max-width: 600px;
+        }
+        .sad-face {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 48px;
         }
         h1 {
             font-size: 24px;
@@ -25,37 +32,29 @@
         p {
             font-size: 18px;
         }
-        #progress {
-            width: 100%;
-            background-color: white;
-            height: 20px;
+        #progress-text {
             margin-top: 20px;
-        }
-        #progress-bar {
-            width: 0;
-            height: 100%;
-            background-color: green;
+            font-size: 24px;
         }
     </style>
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
 </head>
 <body>
+    <div class="sad-face">:(</div>
     <div class="content">
-        <h1>:(</h1>
-        <p>お使いのPCに問題が発生したため、再起動する必要があります。エラーコード: 0x0000007B</p>
+        <h1>お使いのPCに問題が発生したため、再起動する必要があります。エラーコード: 0x0000007B</h1>
         <p>詳細については、以下のサポートページをご覧ください:</p>
-        <a href="https://support.microsoft.com/ja-jp" style="color: white; text-decoration: underline;">Microsoft サポート</a>
-        <div id="progress">
-            <div id="progress-bar"></div>
-        </div>
+        <div id="qrcode"></div>
+        <div id="progress-text">0%</div>
     </div>
     <script>
         let progress = 0;
-        const progressBar = document.getElementById('progress-bar');
+        const progressText = document.getElementById('progress-text');
 
         function updateProgress() {
             if (progress < 100) {
                 progress++;
-                progressBar.style.width = progress + '%';
+                progressText.textContent = progress + '%';
                 setTimeout(updateProgress, 50); // 0.05秒ごとに1％進む
             } else {
                 setTimeout(() => {
@@ -65,6 +64,15 @@
         }
 
         updateProgress();
+
+        // QRコードを生成
+        new QRCode(document.getElementById('qrcode'), {
+            text: 'https://support.microsoft.com/ja-jp',
+            width: 128,
+            height: 128,
+            colorDark : '#ffffff',
+            colorLight : '#0000ff'
+        });
     </script>
 </body>
 </html>
