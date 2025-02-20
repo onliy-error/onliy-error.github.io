@@ -16,7 +16,7 @@
             top: -100px;
             color: #00FF00; /* 明るい緑色 */
             opacity: 0;
-            animation: fall 5s linear infinite, glow 2s ease-in-out infinite alternate;
+            animation: fall 3s linear infinite, glow 2s ease-in-out infinite alternate;
         }
         @keyframes fall {
             0% { top: -100px; opacity: 1; }
@@ -37,15 +37,15 @@
             matrix.className = 'matrix';
             matrix.style.left = `${Math.random() * 100}vw`; // ランダムな位置から開始
             matrix.style.fontSize = `${Math.random() * 20 + 10}px`;
-            matrix.innerHTML = Array.from({ length: 10 }, () => characters[Math.floor(Math.random() * characters.length)]).join('<br>');
+            matrix.innerHTML = Array.from({ length: 20 }, () => characters[Math.floor(Math.random() * characters.length)]).join('<br>');
             document.body.appendChild(matrix);
 
             setTimeout(() => {
                 matrix.remove();
-            }, 5000);
+            }, 3000);
         }
 
-        setInterval(createMatrix, 200);
+        setInterval(createMatrix, 100);
     </script>
 </body>
 </html>
