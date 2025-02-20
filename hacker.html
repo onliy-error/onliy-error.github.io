@@ -3,29 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>マトリックス風エフェクト</title>
+    <title>hacker</title>
     <style>
         body {
             margin: 0;
             background: black;
             overflow: hidden;
-            color: green;
             font-family: monospace;
         }
         .matrix {
             position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            white-space: nowrap;
-            font-size: 20px;
+            top: -100px;
+            color: #00FF00; /* 明るい緑色 */
             opacity: 0;
-            animation: fall 5s linear infinite;
+            animation: fall 5s linear infinite, glow 2s ease-in-out infinite alternate;
         }
         @keyframes fall {
             0% { top: -100px; opacity: 1; }
             90% { opacity: 0.2; }
             100% { top: 100vh; opacity: 0; }
+        }
+        @keyframes glow {
+            0% { text-shadow: 0 0 10px #00FF00, 0 0 20px #00FF00, 0 0 30px #00FF00; }
+            100% { text-shadow: 0 0 20px #00FF00, 0 0 30px #00FF00, 0 0 40px #00FF00; }
         }
     </style>
 </head>
@@ -35,8 +35,9 @@
         const createMatrix = () => {
             const matrix = document.createElement('div');
             matrix.className = 'matrix';
+            matrix.style.left = `${Math.random() * 100}vw`; // ランダムな位置から開始
             matrix.style.fontSize = `${Math.random() * 20 + 10}px`;
-            matrix.innerText = Array.from({ length: 10 }, () => characters[Math.floor(Math.random() * characters.length)]).join('');
+            matrix.innerHTML = Array.from({ length: 10 }, () => characters[Math.floor(Math.random() * characters.length)]).join('<br>');
             document.body.appendChild(matrix);
 
             setTimeout(() => {
