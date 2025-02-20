@@ -3,6 +3,7 @@ const ctx = canvas.getContext('2d');
 const cellSize = 10;
 const rows = 50;
 const cols = 50;
+let interval = 100;  // 初期値は100ミリ秒
 
 canvas.width = cols * cellSize;
 canvas.height = rows * cellSize;
@@ -65,7 +66,7 @@ function update() {
     if (!running) return;
     grid = getNextGeneration(grid);
     drawGrid();
-    setTimeout(update, 100);
+    setTimeout(update, interval);
 }
 
 canvas.addEventListener('click', (e) => {
@@ -81,6 +82,10 @@ document.getElementById('startButton').addEventListener('click', () => {
     if (running) {
         update();
     }
+});
+
+document.getElementById('interval').addEventListener('input', (e) => {
+    interval = parseInt(e.target.value, 10);
 });
 
 drawGrid();
