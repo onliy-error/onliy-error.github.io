@@ -41,7 +41,7 @@
             matrix.style.left = `${leftPosition}vw`;
             matrix.style.fontSize = `${Math.random() * 10 + 20}px`;
             matrix.style.animationDuration = `${Math.random() * 3 + 2}s`;
-            matrix.innerHTML = Array.from({ length: Math.floor(Math.random() * 9) + 12 }, () => 
+            matrix.innerHTML = Array.from({ length: Math.floor(Math.random() * 9) + 12 }, () =>
                 characters[Math.floor(Math.random() * characters.length)]
             ).join('<br>');
             document.body.appendChild(matrix);
@@ -50,7 +50,7 @@
                 usedPositions.delete(leftPosition);
             });
         };
-        setInterval(createMatrix, 200); // 少し間隔を広げる
+        setInterval(createMatrix, 100); // 降ってくる量を増やす
     </script>
 </body>
 </html>
