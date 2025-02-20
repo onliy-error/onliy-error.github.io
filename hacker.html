@@ -37,8 +37,10 @@
             } while (usedPositions.has(leftPosition)); // 位置が重ならないようにする
             usedPositions.add(leftPosition);
             matrix.style.left = `${leftPosition}vw`;
-            matrix.style.fontSize = `${Math.random() * 10 + 15}px`; // 大きさを調整
+            matrix.style.fontSize = `${Math.random() * 10 + 20}px`; // 大きさを調整
             matrix.style.animationDuration = `${Math.random() * 3 + 2}s`; // 落ちるスピードを調整
+            const textColor = Math.random() > 0.3 ? '#00FF00' : '#008000'; // 明るい緑色を多めに設定
+            matrix.style.color = textColor;
             matrix.innerHTML = Array.from({ length: Math.floor(Math.random() * 9) + 12 }, () => characters[Math.floor(Math.random() * characters.length)]).join('<br>');
             document.body.appendChild(matrix);
 
@@ -49,7 +51,7 @@
             });
         }
 
-        setInterval(createMatrix, 50); // より多くの文字を降らせる
+        setInterval(createMatrix, 100); // より多くの文字を降らせる
     </script>
 </body>
 </html>
