@@ -15,17 +15,17 @@
         .matrix {
             position: absolute;
             top: -100px;
-            color: #00FF00; /* 明るい緑色 */
+            color: #00FF00;
             opacity: 1;
-            animation: fall linear forwards, glow 1.5s infinite alternate; /* 追加 */
+            animation: fall linear forwards, glow 1.5s infinite alternate;
         }
         @keyframes fall {
             0% { top: -100px; opacity: 1; }
             100% { top: 100vh; opacity: 0; }
         }
-        @keyframes glow { /* 追加 */
-            0% { text-shadow: 0 0 5px #00FF00, 0 0 10px #00FF00, 0 0 15px #00FF00, 0 0 20px #00FF00, 0 0 25px #00FF00; }
-            100% { text-shadow: 0 0 10px #00FF00, 0 0 20px #00FF00, 0 0 30px #00FF00, 0 0 40px #00FF00, 0 0 50px #00FF00; }
+        @keyframes glow {
+            0% { text-shadow: 0 0 5px #00FF00; }
+            100% { text-shadow: 0 0 10px #00FF00; }
         }
     </style>
 </head>
@@ -33,40 +33,29 @@
     <script>
         const characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
         const symbols = '!@#$%^&*()_+-={}[]|:;"\'<>,.?/';
-        const usedPositions = new Set(); // 使用済み位置を記録
+        const usedPositions = new Set();
         const createMatrix = () => {
             const matrix = document.createElement('div');
             matrix.className = 'matrix';
             let leftPosition;
             do {
                 leftPosition = Math.floor(Math.random() * 100);
-            } while (usedPositions.has(leftPosition)); // 位置が重ならないようにする
+            } while (usedPositions.has(leftPosition));
             usedPositions.add(leftPosition);
             matrix.style.left = `${leftPosition}vw`;
-            matrix.style.fontSize = `${Math.random() * 10 + 20}px`; // 大きさを調整
-            matrix.style.animationDuration = `${Math.random() * 3 + 2}s`; // 落ちるスピードを調整
-            const textColor = Math.random() > 0.3 ? '#00FF00' : '#008000'; // 明るい緑色を多めに設定
-            matrix.style.color = textColor;
-
-            // 文字列にランダムな確率で記号を追加
-            let textArray = Array.from({ length: Math.floor(Math.random() * 9) + 12 }, () => {
-                if (Math.random() > 0.8) {
-                    return symbols[Math.floor(Math.random() * symbols.length)];
-                } else {
-                    return characters[Math.floor(Math.random() * characters.length)];
-                }
-            });
+            matrix.style.fontSize = `${Math.random() * 10 + 20}px`;
+            matrix.style.animationDuration = `${Math.random() * 3 + 2}s`;
+            const textArray = Array.from({ length: Math.floor(Math.random() * 9) + 12 }, () => 
+                Math.random() > 0.8 ? symbols[Math.floor(Math.random() * symbols.length)] : characters[Math.floor(Math.random() * characters.length)]
+            );
             matrix.innerHTML = textArray.join('<br>');
             document.body.appendChild(matrix);
-
-            // アニメーション終了後に要素を削除
             matrix.addEventListener('animationend', () => {
                 matrix.remove();
-                usedPositions.delete(leftPosition); // 使用済み位置を解放
+                usedPositions.delete(leftPosition);
             });
         }
-
-        setInterval(createMatrix, 100); // より多くの文字を降らせる
+        setInterval(createMatrix, 200); // 間隔を広げてさらに軽量化
     </script>
 </body>
 </html>
