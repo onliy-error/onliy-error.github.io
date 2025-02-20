@@ -9,7 +9,21 @@
 <body>
     <div id="gameContainer">
         <canvas id="gameCanvas"></canvas>
-        <button id="startButton">開始 / 停止</button>
+        <button id="startButton">Start</button>
+        <button id="presetButton">Preset</button>
+        <input type="number" id="interval" placeholder="Interval (ms)">
+    </div>
+    <div id="instructions">
+        <h2>使い方</h2>
+        <p>マス目をクリックしてところどころ黒く塗りつぶしてください。黒いマスは生命の存在を意味します。</p>
+        <p>「Start」ボタンを押すと，以下のルールにのっとって世代交代のシミュレーションが始まります。</p>
+        <h3>ルール</h3>
+        <ul>
+            <li>誕生（＝白→黒になる）条件：白いマスの周囲に3つの黒いマスがあれば次の世代では黒いマスになる。</li>
+            <li>維持（＝黒→黒のまま）条件：黒いマスの周囲に2つか3つの黒いマスがあれば次の世代でも黒いマスになる。</li>
+            <li>上記以外の場合には，次の世代で白いマスになる。</li>
+        </ul>
+        <p>「Preset」のところでは，あらかじめ用意された塗りつぶしパターンが選択できます。選んだら「Set」ボタンを押し，「Start」ボタンで開始してください。「Interval」のところではスピードを調節できます。</p>
     </div>
     <script src="scripts.js"></script>
 </body>
