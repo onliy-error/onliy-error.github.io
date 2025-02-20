@@ -15,17 +15,12 @@
             position: absolute;
             top: -100px;
             color: #00FF00; /* 明るい緑色 */
-            opacity: 0;
-            animation: fall 3s linear infinite, glow 2s ease-in-out infinite alternate;
+            opacity: 1;
+            animation: fall 3s linear forwards;
         }
         @keyframes fall {
             0% { top: -100px; opacity: 1; }
-            90% { opacity: 0.2; }
-            100% { top: 100vh; opacity: 0; display: none; }
-        }
-        @keyframes glow {
-            0% { text-shadow: 0 0 10px #00FF00, 0 0 20px #00FF00, 0 0 30px #00FF00; }
-            100% { text-shadow: 0 0 20px #00FF00, 0 0 30px #00FF00, 0 0 40px #00FF00; }
+            100% { top: 100vh; opacity: 0; }
         }
     </style>
 </head>
@@ -36,16 +31,15 @@
             const matrix = document.createElement('div');
             matrix.className = 'matrix';
             matrix.style.left = `${Math.random() * 100}vw`; // ランダムな位置から開始
-            matrix.style.fontSize = '20px'; // 大きさを調整
-            matrix.innerHTML = Array.from({ length: Math.floor(Math.random() * 5) + 6 }, () => characters[Math.floor(Math.random() * characters.length)]).join('<br>');
+            matrix.style.fontSize = `${Math.random() * 10 + 15}px`; // 大きさを調整
+            matrix.innerHTML = Array.from({ length: Math.floor(Math.random() * 9) + 12 }, () => characters[Math.floor(Math.random() * characters.length)]).join('<br>');
             document.body.appendChild(matrix);
 
-            setTimeout(() => {
-                matrix.remove();
-            }, 3000);
+            // アニメーション終了後に要素を削除
+            matrix.addEventListener('animationend', () => matrix.remove());
         }
 
-        setInterval(createMatrix, 100);
+        setInterval(createMatrix, 50); // より多くの文字を降らせる
     </script>
 </body>
 </html>
