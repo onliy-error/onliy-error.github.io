@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ʰᵃᶜᵏᵉʳ ⁱⁿᶜᵃⁿᵗᵃᵗⁱᵒⁿ</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap'); /* ハッカーっぽいフォント */
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
         body {
             margin: 0;
             background: black;
@@ -16,23 +16,19 @@
             position: absolute;
             top: -100px;
             color: #00FF00;
+            animation: fall linear forwards;
             opacity: 1;
-            animation: fall linear forwards, glow 1.5s infinite alternate;
+            text-shadow: 0 0 3px #00FF00; /* 光の効果を控えめに */
         }
         @keyframes fall {
             0% { top: -100px; opacity: 1; }
             100% { top: 100vh; opacity: 0; }
         }
-        @keyframes glow {
-            0% { text-shadow: 0 0 5px #00FF00; }
-            100% { text-shadow: 0 0 10px #00FF00; }
-        }
     </style>
 </head>
 <body>
     <script>
-        const characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-        const symbols = '!@#$%^&*()_+-={}[]|:;"\'<>,.?/';
+        const characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz！？＄＆％＠';
         const usedPositions = new Set();
         const createMatrix = () => {
             const matrix = document.createElement('div');
@@ -46,7 +42,7 @@
             matrix.style.fontSize = `${Math.random() * 10 + 20}px`;
             matrix.style.animationDuration = `${Math.random() * 3 + 2}s`;
             const textArray = Array.from({ length: Math.floor(Math.random() * 9) + 12 }, () => 
-                Math.random() > 0.8 ? symbols[Math.floor(Math.random() * symbols.length)] : characters[Math.floor(Math.random() * characters.length)]
+                characters[Math.floor(Math.random() * characters.length)]
             );
             matrix.innerHTML = textArray.join('<br>');
             document.body.appendChild(matrix);
@@ -55,7 +51,7 @@
                 usedPositions.delete(leftPosition);
             });
         }
-        setInterval(createMatrix, 200); // 間隔を広げてさらに軽量化
+        setInterval(createMatrix, 300);
     </script>
 </body>
 </html>
