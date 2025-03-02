@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+  }
+  .square {
+    width: 200px;
+    height: 200px;
+    background: linear-gradient(to right, black 50%, white 50%);
+    position: relative;
+    margin: 20px;
+  }
+  .face {
+    width: 100%;
+    height: 100%;
+    background: url('path_to_face_image.png') no-repeat center/cover;
+  }
+  .stick-figure {
+    width: 30px;
+    height: 80px;
+    background: transparent;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .stick-figure div {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: currentColor;
+    margin: 2px 0;
+  }
+  .stick-figure.red { color: red; top: -20px; left: 85px; }
+  .stick-figure.green { color: green; top: 60px; left: 55px; }
+  .stick-figure.yellow { color: yellow; top: 60px; left: 85px; transform: rotate(90deg); }
+  .stick-figure.blue { color: blue; top: 60px; left: 115px; }
+</style>
+</head>
+<body>
+  <div class="square">
+    <div class="face"></div>
+    <div class="stick-figure red">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <div class="stick-figure green">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <div class="stick-figure yellow">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <div class="stick-figure blue">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+</body>
+</html>
